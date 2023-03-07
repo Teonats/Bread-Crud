@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Baker = require('../models/baker')
 
+
 router.get('/', async (req,res) => {
     const bakers = await Baker.find().populate('breads')
 })
@@ -16,6 +17,7 @@ router.get('/:id', async (req,res) => {
 
 router.get('/data/seed', async (req, res) => {
     await Baker.deleteMany()
+  
     const seedData = [
         {
           name: 'Monica',
@@ -51,6 +53,13 @@ router.get('/data/seed', async (req, res) => {
       await Baker.insertMany(seedData)
       res.redirect('/breads')
 })
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  await Baker.findByIdAndDelete(id)
+  res.status(303).redirect('/breads')
+})
+
 
 
 
